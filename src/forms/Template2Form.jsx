@@ -96,9 +96,13 @@ const Template2Form = () => {
         </button>
       </div>
     );
-  const content = isLoading ? (<h1>Sending mail</h1>):(
+  const content = isLoading ? (
     <div>
-      <h1>NORTHFIELD MONTESSORI RESULT PORTAL</h1>
+      <h1>Sending mail</h1>
+    </div>
+  ) : (
+    <div className="p-3">
+      <h1 className="text-center text-2xl mt-8">NORTHFIELD MONTESSORI RESULT PORTAL</h1>
       <div className="bg-slate-100 m-3 border shadow-sm items-center flex flex-col">
         <form
           onSubmit={saveDetail}
@@ -292,12 +296,7 @@ const Template2Form = () => {
           </button>
         </form>
       </div>
-      <button
-        onClick={save}
-        className="bg-green-500 mt-10 rounded-xl p-3 shadow-lg text-white ml-[50%]"
-      >
-        Save Record
-      </button>
+      {buttons()}
     </div>
   );
 

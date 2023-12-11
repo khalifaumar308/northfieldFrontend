@@ -13,6 +13,7 @@ const LandingPage = () => {
   const create = () => {
     const URL = sigCanvas.current.getTrimmedCanvas().toDataURL("image/png");
     setImageURL(URL);
+    sigCanvas.current.clear();
   };
   const saveDetails = () => {
     const details = {
@@ -84,7 +85,7 @@ const LandingPage = () => {
         </div>
         <button
           onClick={saveDetails}
-          className="mt-4 w-full p-3 rounded-md hover:bg-orange-300 bg-orange-500 text-white text-lg"
+          className="mt-4 w-full p-3 rounded-md hover:bg-orange-200 bg-orange-500 text-white text-lg"
         >
           Continue
         </button>
