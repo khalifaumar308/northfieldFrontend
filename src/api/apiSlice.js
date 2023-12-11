@@ -17,7 +17,7 @@ import { setCredentials, logOut } from "../middleware/auth/authSlice";
 // export const { useSaveStudentMutation } = appApi;
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: "http://localhost:3000",
+  baseUrl: "https://northfiled-montessori.onrender.com",
   credentials: "include",
   prepareHeaders: (headers, { getState }) => {
     const token = getState().auth.token;

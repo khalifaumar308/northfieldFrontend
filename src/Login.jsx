@@ -36,7 +36,7 @@ const Login = () => {
       console.log(userData);
       setEmail("");
       setPwd("");
-      navigate("/");
+      navigate("/landingpage");
     } catch (err) {
       if (!err?.originalStatus) {
         setErrMsg("No Server Response");

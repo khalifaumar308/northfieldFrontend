@@ -14,7 +14,7 @@ import Register from "./Register";
 function App() {
   return (
     <Routes>
-      <Route
+      {/* <Route
         path="/download"
         element={
           <PDFDownloadLink document={<Template2 />} fileName="somename.pdf">
@@ -23,27 +23,27 @@ function App() {
             }
           </PDFDownloadLink>
         }
-      />
-      <Route
+      /> */}
+      {/* <Route
         path="/view"
         element={
           <PDFViewer>
             <Template1 />
           </PDFViewer>
         }
-      />
+      /> */}
       <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Register />} />
-      <Route path="/" index element={<LandingPage />} />
+      <Route path="/" index element={<Register />} />
+      <Route path="/landingpage" element={<LandingPage />} />
       <Route path="/template1" index element={<Template1Form />} />
-      <Route
+      {/* <Route
         path="/t2"
         element={
           <PDFViewer>
             <Template2 />
           </PDFViewer>
         }
-      />
+      /> */}
       <Route path="/template2" element={<Template2Form />} />
     </Routes>
   );
