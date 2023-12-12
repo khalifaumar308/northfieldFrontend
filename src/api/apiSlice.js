@@ -18,7 +18,7 @@ import { setCredentials, logOut } from "../middleware/auth/authSlice";
 
 const baseQuery = fetchBaseQuery({
   baseUrl: "https://northfield-montessori.onrender.com",
-  credentials: "include",
+  // credentials: "include",
   prepareHeaders: (headers, { getState }) => {
     const token = getState().auth.token;
     if (token) {
@@ -32,7 +32,6 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
   let result = await baseQuery(args, api, extraOptions);
 
   if (result?.error?.originalStatus === 403) {
-    console.log("sending refresh token");
     // send refresh token to get new access token
     const refreshResult = await baseQuery("user/refresh", api, extraOptions);
     console.log(refreshResult);
