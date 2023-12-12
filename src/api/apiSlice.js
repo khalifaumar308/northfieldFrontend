@@ -19,7 +19,7 @@ import { setCredentials, logOut } from "../middleware/auth/authSlice";
 const baseQuery = fetchBaseQuery({
   baseUrl: "https://northfield-montessori.onrender.com",
   credentials: "same-origin",
-  // mode:'no-cors',
+  mode:'no-cors',
   prepareHeaders: (headers, { getState }) => {
     const token = getState().auth.token;
     if (token) {
