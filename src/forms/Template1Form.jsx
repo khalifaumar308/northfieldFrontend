@@ -98,6 +98,21 @@ const Template1Form = () => {
     e.target.rating.value = "";
   }
 
+  const getData = () => {
+    const dtls = JSON.parse(sessionStorage.getItem("details"));
+    const student = {
+      details: {
+        ...dtls,
+        signature: JSON.parse(sessionStorage.getItem("teacherDetails"))
+          .signature,
+      },
+      topics: JSON.parse(sessionStorage.getItem("topics")),
+      assesment: assesment,
+      template: 1,
+    };
+  return student
+  }
+
   const saveStudent = async () => {
     const topics = JSON.parse(sessionStorage.getItem('subjects'))
     let stds = JSON.parse(sessionStorage.getItem('students'))
@@ -113,6 +128,7 @@ const Template1Form = () => {
       assesment: assesment,
       template: 1,
     };
+
     try {
       await saveStudentMutation(student)
       const stdss = [...stds, student]
@@ -300,15 +316,24 @@ const Template1Form = () => {
   return preview ? (
     <div className="w-full">
       <PDFViewer showToolbar>
-        <Template1 />
+        <Template1 tData={getData()} />
       </PDFViewer>
       {buttons()}
     </div>
   ) : download ? (
     <div>
-      <PDFDownloadLink document={<Template1 />} fileName="northfield.pdf">
+      <PDFDownloadLink
+        document={<Template1 tData={getData()} />}
+        fileName="northfield.pdf"
+      >
         {({ blob, url, loading, error }) =>
-          loading ? "Loading document..." : <button className="ml-[40%] mt-8 border-2 p-2 bg-orange-400">Download</button>
+          loading ? (
+            "Loading document..."
+          ) : (
+            <button className="ml-[40%] mt-8 border-2 p-2 bg-orange-400">
+              Download
+            </button>
+          )
         }
       </PDFDownloadLink>
       {buttons()}
