@@ -3,18 +3,22 @@ import {
   Route,
   Routes,
   Navigate,
+  BrowserRouter
 } from "react-router-dom";
 import { Template1Form, Template2Form } from "./forms";
 import { Template1, Template2 } from "./formTemplates";
 import LandingPage from "./LandingPage";
 import Login from "./Login";
 import Register from "./Register";
+import Navbar from "./Navbar";
 
 
 function App() {
   return (
-    <Routes>
-      {/* <Route
+    <BrowserRouter>
+        <Navbar />
+      <Routes>
+        {/* <Route
         path="/download"
         element={
           <PDFDownloadLink document={<Template2 />} fileName="somename.pdf">
@@ -24,7 +28,7 @@ function App() {
           </PDFDownloadLink>
         }
       /> */}
-      {/* <Route
+        {/* <Route
         path="/view"
         element={
           <PDFViewer>
@@ -32,11 +36,11 @@ function App() {
           </PDFViewer>
         }
       /> */}
-      <Route path="/login" element={<Login />} />
-      <Route path="/" index element={<Register />} />
-      <Route path="/landingpage" element={<LandingPage />} />
-      <Route path="/template1" index element={<Template1Form />} />
-      {/* <Route
+        <Route path="/login" element={<Login />} />
+        <Route path="/" index element={<Register />} />
+        <Route path="/landingpage" element={<LandingPage />} />
+        <Route path="/template1" index element={<Template1Form />} />
+        {/* <Route
         path="/t2"
         element={
           <PDFViewer>
@@ -44,8 +48,9 @@ function App() {
           </PDFViewer>
         }
       /> */}
-      <Route path="/template2" element={<Template2Form />} />
-    </Routes>
+        <Route path="/template2" element={<Template2Form />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
