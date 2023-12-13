@@ -15,11 +15,10 @@ import { setCredentials, logOut } from "../middleware/auth/authSlice";
 // });
 
 // export const { useSaveStudentMutation } = appApi;
-
 const baseQuery = fetchBaseQuery({
   baseUrl: "https://northfield-montessori.onrender.com",
-  credentials: "same-origin",
-  mode:'no-cors',
+  credentials: "include",
+  // mode: "no-cors",
   prepareHeaders: (headers, { getState }) => {
     const token = getState().auth.token;
     if (token) {
