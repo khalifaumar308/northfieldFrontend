@@ -11,6 +11,7 @@ import LandingPage from "./LandingPage";
 import Login from "./Login";
 import Register from "./Register";
 import Navbar from "./Navbar";
+import Authenticate from "./middleware/Authenticate";
 
 
 function App() {
@@ -37,9 +38,12 @@ function App() {
         }
       /> */}
         <Route path="/login" element={<Login />} />
-        <Route path="/" index element={<Register />} />
-        <Route path="/landingpage" element={<LandingPage />} />
-        <Route path="/template1" index element={<Template1Form />} />
+        <Route path="/register" index element={<Register />} />
+        <Route element={<Authenticate/>}>
+          <Route path="/" index element={<LandingPage />} />
+          <Route path="/template1" index element={<Template1Form />} />
+          <Route path="/template2" element={<Template2Form />} />
+        </Route>
         {/* <Route
         path="/t2"
         element={
@@ -48,7 +52,6 @@ function App() {
           </PDFViewer>
         }
       /> */}
-        <Route path="/template2" element={<Template2Form />} />
       </Routes>
     </BrowserRouter>
   );
