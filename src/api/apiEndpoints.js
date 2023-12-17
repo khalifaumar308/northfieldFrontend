@@ -25,7 +25,7 @@ export const appApiEndpoints = apiSlice.injectEndpoints({
     }),
     getClassData: builder.query({
       query: (classs) => ({
-        url: `user/data/?${classs}`,
+        url: `user/data/?class=${classs}`,
         method: "GET",
       }),
     }),
