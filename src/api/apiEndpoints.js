@@ -16,7 +16,24 @@ export const appApiEndpoints = apiSlice.injectEndpoints({
         body: { ...credentials },
       }),
     }),
+    saveClassData: builder.mutation({
+      query: (credentials) => ({
+        url: "/user/data",
+        method: "POST",
+        body: { ...credentials },
+      }),
+    }),
+    getClassData: builder.query({
+      query: (classs) => ({
+        url: `user/data/?${classs}`,
+        method: "GET",
+      }),
+    }),
   }),
 });
-
-export const { useSaveStudentMutation, useInstructureRegisterMutation } = appApiEndpoints;
+export const {
+  useSaveStudentMutation,
+  useInstructureRegisterMutation,
+  useSaveClassDataMutation,
+  useGetClassDataQuery,
+} = appApiEndpoints;

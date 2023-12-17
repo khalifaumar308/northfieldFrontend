@@ -1,4 +1,7 @@
 import { useState } from "react"
+import { useGetClassDataQuery, useSaveClassDataMutation } from "../api/apiEndpoints";
+import { useDispatch } from "react-redux";
+
 
 const TemplateData = () => {
   const [topic, setTopic] = useState('')
@@ -15,10 +18,13 @@ const TemplateData = () => {
   const [email, setEmail] = useState('')
   const [absent, setAbsent] = useState(0)
   
-  const [template1, setTemplate1] = useState(false)
+  const [template1, setTemplate1] = useState(true)
   //template2
   const [subject, setSubject] = useState('')
   const [subjects, setSubjects] = useState([])
+
+  const [saveClassData, { isLoading, isSuccess, isError, error }] =
+    useSaveClassDataMutation();
 
   const topicDivs = topics.map(({ topic, subtopics }, id) => {
     return (
@@ -162,6 +168,15 @@ const TemplateData = () => {
     // console.log(topics)
   }
 
+  const saveToApi = async (data) => {
+    try {
+      const userData = await saveClassData({ topics, template:'1', class:"sf2" }).unwrap();
+      console.log('saved', isSuccess)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   return (
     <main>
       <section className={template1 ? "bg-slate-100 m-4 p-2" : "hidden"}>
@@ -238,13 +253,14 @@ const TemplateData = () => {
         </div>
         <button
           onClick={() => {
-            // ##TODO save data to api
+            saveToApi(topics)
             console.log(topics);
           }}
           className="text-white bg-green-800 shadow-md rounded-md p-1 shadow-gray hover:bg-green-300 mt-8"
         >
           Save Class Data
         </button>
+        {isLoading&&<h1>Saving......</h1>}
       </section>
       <section className={!template1 ? "bg-slate-100 m-4 p-2" : "hidden"}>
         <label>Subject:</label>
