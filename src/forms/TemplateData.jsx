@@ -10,6 +10,7 @@ const TemplateData = () => {
   const [questions, setQuestions] = useState([]);
   const [statuss, setStatuss] = useState([]);
   const [notes, setNotes] = useState([]);
+  const [sclass, setSclass] = useState("");
 
   const [subTopics, setSubTopics] = useState([])
   const [topics, setTopics] = useState([])
@@ -22,9 +23,12 @@ const TemplateData = () => {
   //template2
   const [subject, setSubject] = useState('')
   const [subjects, setSubjects] = useState([])
+  const [template, setTemplate] = useState(0)
 
   const [saveClassData, { isLoading, isSuccess, isError, error }] =
     useSaveClassDataMutation();
+  
+  const { data: classData, isFetching } = useGetClassDataQuery(sclass);
 
   const topicDivs = topics.map(({ topic, subtopics }, id) => {
     return (
@@ -168,18 +172,51 @@ const TemplateData = () => {
     // console.log(topics)
   }
 
-  const saveToApi = async (data) => {
+  const saveToApi = async () => {
     try {
-      const userData = await saveClassData({ topics, template:'1', class:"sf2" }).unwrap();
-      console.log('saved', isSuccess)
+      const userData = await saveClassData({ data:topics, template, class:sclass }).unwrap();
+      console.log('saved', isSuccess, userData)
     } catch (error) {
       console.log(error)
     }
   }
 
+  const searchData = async () => {
+    console.log(isFetching)
+    const cdata = classData
+    console.log(cdata)
+  }
+
   return (
     <main>
-      <section className={template1 ? "bg-slate-100 m-4 p-2" : "hidden"}>
+      <section className="m-3 mb-6 bg-slate-100 p-2 flex align-middle items-center">
+        <label>Class:</label>
+        <input
+          className="mr-3 ml-2 m-2 border-blue-100 border"
+          placeholder="class"
+          value={sclass}
+          onChange={(e) => setSclass(e.target.value)}
+        />
+        <label>Template:</label>
+        <select
+          value={template}
+          onChange={(e) => {
+            setTemplate(e.target.value);
+            console.log(e.target.value);
+          }}
+        >
+          <option value="0">---choose---</option>
+          <option value="1">Montessori</option>
+          <option value="2">Grade</option>
+        </select>
+        <button
+          onClick={searchData}
+          className="ml-2 text-white bg-red-500 shadow-xl rounded-md p-1 shadow-gray hover:bg-red-300"
+        >
+          Search Data
+        </button>
+      </section>
+      <section className={template === "1" ? "bg-slate-100 m-4 p-2" : "hidden"}>
         <div className="flex flex-col">
           <label>
             Topic
@@ -253,16 +290,18 @@ const TemplateData = () => {
         </div>
         <button
           onClick={() => {
-            saveToApi(topics)
+            saveToApi(topics);
             console.log(topics);
           }}
           className="text-white bg-green-800 shadow-md rounded-md p-1 shadow-gray hover:bg-green-300 mt-8"
         >
           Save Class Data
         </button>
-        {isLoading&&<h1>Saving......</h1>}
+        {isLoading && <h1>Saving......</h1>}
       </section>
-      <section className={!template1 ? "bg-slate-100 m-4 p-2" : "hidden"}>
+      <section
+        className={!template === "1" ? "bg-slate-100 m-4 p-2" : "hidden"}
+      >
         <label>Subject:</label>
         <input
           value={subject}
@@ -314,7 +353,7 @@ const TemplateData = () => {
           />
         </label>
       </section>
-      <section id="template 1" className={template1 ? "flex" : "hidden"}>
+      <section id="template 1" className={template === "1" ? "flex" : "hidden"}>
         <form id="template1form" onSubmit={saveReultTemplate1}>
           {topicDivs}
           <button
@@ -325,7 +364,9 @@ const TemplateData = () => {
           </button>
         </form>
       </section>
-      <section className={!template1 ? "flex flex-col p-2 mt-6" : "hidden"}>
+      <section
+        className={template === "2" ? "flex flex-col p-2 mt-6" : "hidden"}
+      >
         <div className="flex text-sm w-full bg-green-500 border-black border">
           <div className="w-[20%] p-1">SUBJECT</div>
           <div className="w-[7%] p-1 border-black border-l">CA1(15)</div>
