@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react"
 import { useGetClassDataQuery, useSaveClassDataMutation } from "../api/apiEndpoints";
-import { useDispatch } from "react-redux";
+import { selectCurrentUser } from "../middleware/auth/authSlice";
+import { useSelector } from "react-redux";
+// import { useDispatch } from "react-redux";
 
 
 const TemplateData = () => {
@@ -25,6 +27,22 @@ const TemplateData = () => {
   const [subjects, setSubjects] = useState([])
   const [template, setTemplate] = useState(0)
   const [chooseTemplate, setChooseTemplate] = useState(false)
+
+  const areas = [
+    "LIBRARY",
+    "PHYSICAL EDUC.",
+    "SCIENCE & NATURE",
+    "ARTS",
+  ]
+  const ass = [
+    "Neatness",
+    "Following Instructions",
+    "Independence",
+    "Self Control",
+    "Punctuality",
+  ];
+
+  const user = useSelector(selectCurrentUser);
 
   const [saveClassData, { isLoading, isSuccess, isError, error }] =
     useSaveClassDataMutation();
@@ -76,19 +94,35 @@ const TemplateData = () => {
 
   const saveReultTemplate1 = (e) => {
     e.preventDefault()
+    const assesments = [];
+
     Object.keys(e.target).forEach(element => {
       const field = e.target[element]
       if (field.name) {
-        const [topicId, subtopicId, qid, heading] = field.name.split(";");
-        topics[Number(topicId)]["subtopics"][Number(subtopicId)][heading][
-          Number(qid)
-        ] = field.value;
+        const items = field.name.split(";");
+        if (items[0] === "ass") {
+          const assesment = {
+            assessment: ass[Number(items[1])],
+            rating: field.value,
+          };
+          assesments.push(assesment);
+        } else {
+
+          const [topicId, subtopicId, qid, heading] = field.name.split(";");
+          topics[Number(topicId)]["subtopics"][Number(subtopicId)][heading][
+            Number(qid)
+          ] = field.value;
+        }
       }
     });
     const details = {
-      name, email, absent
-    }
-    const data = {details, topics}
+      name,
+      email,
+      absent,
+      // teacher: user.name,
+      // signature: user.signature,
+    };
+    const data = { details, topics, assesment:assesments };
     sessionStorage.setItem('data', JSON.stringify(data))
     document.getElementById('template1form').reset()
     setName('')
@@ -152,19 +186,42 @@ const TemplateData = () => {
 
   const saveResultTemplate2 = (e) => {
     e.preventDefault()
+    const specailAreas = {}
+    areas.map(area => {
+      const dt = { behavior: "", effort: "", skill: "" };
+      specailAreas[area] = dt
+    })
     const t2subjects = {}
+    const assesments = []
     subjects.forEach(sb=>t2subjects[sb]={})
     Object.keys(e.target).forEach(element => {
       const field = e.target[element]
       if (field.name) {
-        const [sb, heading] = field.name.split(';')
-        t2subjects[sb][heading] = field.value
+        const items = field.name.split(';')
+        if (items[0] === 'ass') {
+          const assesment = { assessment:ass[Number(items[1])], rating:field.value };
+          assesments.push(assesment)
+        } else if (items[0] === 'area') {
+          specailAreas[items[1]][items[2]] = field.value
+        } else {
+          const [sb, heading] = items
+          t2subjects[sb][heading] = field.value
+        }
       }
     });
     const details = {
-      name, email, absent
-    }
-    const data = {details, subjects:t2subjects}
+      name,
+      email,
+      absent,
+      // teacher: user.name,
+      // signature: user.signature,
+    };
+    const data = {
+      details,
+      subjects: t2subjects,
+      specailAreas,
+      affectiveAssesment: assesments,
+    };
     sessionStorage.setItem('data', JSON.stringify(data))
     document.getElementById('template2form').reset()
     setName('')
@@ -210,8 +267,43 @@ const TemplateData = () => {
     // console.log(await response.json())
     // console.log(response.status)
   }
+  const areasDivs = areas.map((area, id) => {
+    return (
+      <div key={id} className="flex w-full">
+        <div className="w-[39.8%] text-xs border-black border-b border-l">
+          {area}
+        </div>
+        <input
+          name={`area;${area};behavior`}
+          className="w-[20%] text-xs border-black border-b border-l"
+        />
+        <input
+          name={`area;${area};effort`}
+          className="w-[20%] text-xs border-black border-b border-l"
+        />
+        <input
+          name={`area;${area};skill`}
+          className="w-[20%] text-xs border-r border-black border-b border-l"
+        />
+      </div>
+    );
+  });
 
-  return (
+  const assDivs = ass.map((ass, id) => {
+    return (
+      <div key={id} className="flex w-full">
+        <div className="w-[60%] pl-1 border-black text-xs border-x border-b">
+          {ass}
+        </div>
+        <input
+          name={`ass;${id}`}
+          className="w-[40%] border-black text-xs border-x border-b"
+        />
+      </div>
+    );
+  })
+
+  const content = (
     <main>
       <section className="m-3 mb-6 bg-slate-100 p-2 flex align-middle items-center">
         <label>Class:</label>
@@ -221,7 +313,7 @@ const TemplateData = () => {
           value={sclass}
           onChange={(e) => setSclass(e.target.value)}
         />
-        <div className={`${!chooseTemplate&&"hidden"}`}>
+        <div className={`${!chooseTemplate && "hidden"}`}>
           <label>Template:</label>
           <select
             value={template}
@@ -320,7 +412,7 @@ const TemplateData = () => {
         </div>
         <button
           onClick={() => {
-            saveToApi('1');
+            saveToApi("1");
             console.log(topics);
           }}
           className="text-white bg-green-800 shadow-md rounded-md p-1 shadow-gray hover:bg-green-300 mt-8"
@@ -348,8 +440,8 @@ const TemplateData = () => {
         </button>
         <button
           onClick={() => {
-            console.log(subjects,1234567)
-            saveToApi('2');
+            console.log(subjects, 1234567);
+            saveToApi("2");
             console.log(subjects);
           }}
           className="text-white bg-green-800 shadow-md ml-4 rounded-md p-1 shadow-gray hover:bg-green-300 mt-8"
@@ -395,9 +487,16 @@ const TemplateData = () => {
       <section id="template 1" className={template === "1" ? "flex" : "hidden"}>
         <form id="template1form" onSubmit={saveReultTemplate1}>
           {topicDivs}
+          <div className=" ml-4 mt-14 mb-5">
+            <div className="text-center items-center w-full flex border-black border bg-green-400 ">
+              <div className="w-[60%] ">AFFECTIVE ASSESMENT</div>
+              <div className="border-black border-l p-1 w-[40%]">RATING</div>
+            </div>
+            {assDivs}
+          </div>
           <button
             type="submit"
-            className="bg-red-600 p-1 rounded-md shadow-md shadow-gray"
+            className="text-white ml-4 bg-red-600 p-1 rounded-md shadow-md shadow-gray"
           >
             Save Result{" "}
           </button>
@@ -423,14 +522,45 @@ const TemplateData = () => {
         <div className="w-full flex flex-col text-xs">
           <form onSubmit={saveResultTemplate2} id="template2form">
             {subjectDivs}
+            <div className="flex">
+              <div className="w-[50%] p-2 flex flex-col mt-10">
+                <div className="bg-green-400 p-1">SPECIAL AREAS</div>
+                <div className="flex">
+                  <div className="w-[40%] border-black border-l border-r border-b"></div>
+                  <div className="w-[20%] text-xs p-1 border-black border-r border-b">
+                    BEHAVIOR
+                  </div>
+                  <div className="w-[20%] text-xs p-1 border-black border-r border-b">
+                    EFFORT
+                  </div>
+                  <div className="w-[20%] text-xs p-1 border-black border-r border-b">
+                    SKILL
+                  </div>
+                </div>
+                {areasDivs}
+              </div>
+              <div className="w-[15%]"></div>
+              <div className="w-[35%] mt-14">
+                <div className="text-center items-center w-full flex border-black border bg-green-400 ">
+                  <div className="w-[60%] ">AFFECTIVE ASSESMENT</div>
+                  <div className="border-black border-l p-1 w-[40%]">
+                    RATING
+                  </div>
+                </div>
+                {assDivs}
+              </div>
+            </div>
             <button className="text-sm mt-6 hover:bg-red-400 text-white bg-red-600 p-1 rounded-md shadow-md shadow-gray">
               Save Result
             </button>
           </form>
         </div>
       </section>
+      <section className={`${template !== "2" && "hidden"}`}></section>
     </main>
   );
+
+  return content
 }
 
 export default TemplateData
