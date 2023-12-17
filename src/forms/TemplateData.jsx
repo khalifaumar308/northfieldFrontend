@@ -1,7 +1,12 @@
 import { useState, useEffect } from "react"
-import { useGetClassDataQuery, useSaveClassDataMutation } from "../api/apiEndpoints";
+import { useSaveClassDataMutation } from "../api/apiEndpoints";
 import { selectCurrentUser } from "../middleware/auth/authSlice";
 import { useSelector } from "react-redux";
+import { Template1, Template2 } from "../formTemplates";
+import { useSaveStudentMutation } from "../api/apiEndpoints";
+import { useDispatch } from "react-redux";
+import { PDFViewer } from "@react-pdf/renderer";
+
 // import { useDispatch } from "react-redux";
 
 
@@ -27,6 +32,11 @@ const TemplateData = () => {
   const [subjects, setSubjects] = useState([])
   const [template, setTemplate] = useState(0)
   const [chooseTemplate, setChooseTemplate] = useState(false)
+
+  const [preview, setPreview] = useState(false)
+  const [viewButtons, setViewButtons] = useState(false)
+  const [saveStudentMutation, saveData] = useSaveStudentMutation();
+  
 
   const areas = [
     "LIBRARY",
@@ -128,6 +138,7 @@ const TemplateData = () => {
     setName('')
     setEmail('')
     setAbsent(0)
+    setViewButtons(true)
     // console.log(topics)
   }
 
@@ -227,6 +238,7 @@ const TemplateData = () => {
     setName('')
     setEmail('')
     setAbsent(0)
+    setViewButtons(true)
     // console.log(topics)
   }
 
@@ -303,7 +315,29 @@ const TemplateData = () => {
     );
   })
 
-  const content = (
+  const buttons = () => (
+    <div className="flex mt-8 m-4 align-middle items-center">
+      <button onClick={sendresult} className="text-white shadow-md p-2 rounded-md shadow-black bg-red-950 ml-4">
+        Send Result
+      </button>
+      <button onClick={()=>setPreview(true)} className="text-white shadow-md p-2 rounded-md shadow-black bg-red-950 ml-4">
+        Preview
+      </button>
+      <button
+        onClick={() => setPreview(false)}
+        className="p-2 text-white shadow-md rounded-md shadow-black bg-red-950 ml-4"
+      >
+        Return TO Form
+      </button>
+    </div>
+  );
+
+  const sendresult =async () => {
+    const data = JSON.parse(sessionStorage.getItem('data'))
+    await saveStudentMutation(data)
+  } 
+
+  const content = saveData.isLoading?<h1>Sending Result</h1>:(
     <main>
       <section className="m-3 mb-6 bg-slate-100 p-2 flex align-middle items-center">
         <label>Class:</label>
@@ -557,10 +591,17 @@ const TemplateData = () => {
         </div>
       </section>
       <section className={`${template !== "2" && "hidden"}`}></section>
+      {buttons()}
     </main>
   );
 
-  return content
+  return preview ? (
+    <div>
+      <PDFViewer>
+      {template === '1'?<Template1 /> : <Template2 />}
+      </PDFViewer>
+      {buttons()}
+    </div>): content
 }
 
 export default TemplateData
