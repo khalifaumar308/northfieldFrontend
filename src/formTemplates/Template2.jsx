@@ -14,7 +14,10 @@ import {
 import { template2data } from "../data/data";
 
 const Template2 = () => {
-  const { details, subjects, specailAreas, affectiveAssesment } = template2data;
+  const template2datas = JSON.parse(sessionStorage.getItem('data'))
+  console.log(template2datas)
+  const { details, subjects, specailAreas, affectiveAssesment } = template2datas;
+  // console.log(specailAreas);
   const subjectEntries = Object.entries(subjects)
   const specailAreasEntries = Object.entries(specailAreas)
   const scores = subjectEntries.map(([subject, scores],id) => {
@@ -160,7 +163,7 @@ const Template2 = () => {
 
   return (
     <Document title="Motfield Montessori">
-      <Page size="A4" style={{ padding: "8px", position:'relative' }}>
+      <Page size="A4" style={{ padding: "8px", position: "relative" }}>
         <View
           style={{
             padding: "0 15%",
@@ -247,7 +250,7 @@ const Template2 = () => {
           <View style={{ display: "flex", flexDirection: "row" }}>
             <Text style={{ fontSize: "9px", marginRight: "2px" }}>NAME:</Text>
             <Text style={{ fontSize: "7px", fontStyle: "italic" }}>
-              Asmau Garba
+              {details.name}
             </Text>
           </View>
           <View
@@ -259,14 +262,14 @@ const Template2 = () => {
             }}
           >
             <Text style={{ fontSize: "9px", marginRight: "2px" }}>GRADE:</Text>
-            <Text style={{ fontSize: "9px", fontStyle: "italic" }}>4</Text>
+            <Text style={{ fontSize: "9px", fontStyle: "italic" }}>{ details.class}</Text>
           </View>
           <View style={{ display: "flex", flexDirection: "row" }}>
             <Text style={{ fontSize: "9px", marginRight: "2px" }}>
               ATTENDANCE
             </Text>
             <Text style={{ fontSize: "7px", fontStyle: "italic" }}>
-              (Absent: 12 days)
+              (Absent: {details.absent} days)
             </Text>
           </View>
         </View>
@@ -508,39 +511,41 @@ const Template2 = () => {
               <Text style={{ width: "150px" }}>AFFECTIVE ASSESMENT</Text>
               <Text>RATING</Text>
             </View>
-            {Object.entries(affectiveAssesment).map(([ass, rating], id) => {
-              return (
-                <View
-                  style={{
-                    display: "flex",
-                    flexDirection: "row",
-                    fontSize: "8px",
-                    textTransform: "uppercase",
-                    borderLeft: "2px solid black",
-                    borderRight: "2px solid black",
-                    borderBottom: "2px solid black",
-                  }}
-                  key={id}
-                >
-                  <Text
+            {affectiveAssesment.map(
+              ({ assessment, rating }, id) => {
+                return (
+                  <View
                     style={{
-                      width: "150px",
+                      display: "flex",
+                      flexDirection: "row",
+                      fontSize: "8px",
+                      textTransform: "uppercase",
+                      borderLeft: "2px solid black",
                       borderRight: "2px solid black",
-                      padding: "3px",
+                      borderBottom: "2px solid black",
                     }}
+                    key={id}
                   >
-                    {ass}
-                  </Text>
-                  <Text
-                    style={{
-                      padding: "3px",
-                    }}
-                  >
-                    {rating}
-                  </Text>
-                </View>
-              );
-            })}
+                    <Text
+                      style={{
+                        width: "150px",
+                        borderRight: "2px solid black",
+                        padding: "3px",
+                      }}
+                    >
+                      {assessment}
+                    </Text>
+                    <Text
+                      style={{
+                        padding: "3px",
+                      }}
+                    >
+                      {rating}
+                    </Text>
+                  </View>
+                );
+              }
+            )}
           </View>
         </View>
         <View
@@ -578,7 +583,7 @@ const Template2 = () => {
             }}>Teacher`&apos;`s Signature</Text>
           </View>
         </View> */}
-        <Image style={{ position:'absolute'}} src={logo1} ></Image>
+        <Image style={{ position: "absolute" }} src={logo1}></Image>
       </Page>
     </Document>
   );
