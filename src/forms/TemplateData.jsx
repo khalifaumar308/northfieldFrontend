@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useGetClassDataQuery, useSaveClassDataMutation } from "../api/apiEndpoints";
 import { useDispatch } from "react-redux";
 
@@ -24,11 +24,12 @@ const TemplateData = () => {
   const [subject, setSubject] = useState('')
   const [subjects, setSubjects] = useState([])
   const [template, setTemplate] = useState(0)
+  const [chooseTemplate, setChooseTemplate] = useState(false)
 
   const [saveClassData, { isLoading, isSuccess, isError, error }] =
     useSaveClassDataMutation();
   
-  const { data: classData, isFetching } = useGetClassDataQuery(sclass);
+  // const { data:data, isFetching } = useGetClassDataQuery(sclass);
 
   const topicDivs = topics.map(({ topic, subtopics }, id) => {
     return (
@@ -172,19 +173,42 @@ const TemplateData = () => {
     // console.log(topics)
   }
 
-  const saveToApi = async () => {
+  const saveToApi = async (tpl) => {
     try {
-      const userData = await saveClassData({ data:topics, template, class:sclass }).unwrap();
-      console.log('saved', isSuccess, userData)
+      if (tpl === '1') {
+        const userData = await saveClassData({ data:topics, template:tpl, class:sclass }).unwrap();
+        console.log('saved', isSuccess, userData)
+      } else {
+        const dt = await saveClassData({ data: subjects, template:tpl, class:sclass }).unwrap();
+        console.log(dt, isSuccess, 'saved')
+      }
     } catch (error) {
       console.log(error)
     }
   }
 
   const searchData = async () => {
-    console.log(isFetching)
-    const cdata = classData
-    console.log(cdata)
+    try {
+      const res = await fetch(`http://localhost:3000/user/data?class=${sclass}`);
+      if (res.status != 200) {
+        alert("Class Data is not saved, proceed to choose template")
+        setChooseTemplate(true)
+        return []
+      }
+      const data = await res.json()
+      console.log(data)
+      if (data.template == '1') {
+        setTopics(data.data)
+        setTemplate('1')
+      } else {
+        setSubjects(data.data)
+        setTemplate('2')
+      }
+    } catch (error) {
+      console.log(error)
+    }
+    // console.log(await response.json())
+    // console.log(response.status)
   }
 
   return (
@@ -197,18 +221,20 @@ const TemplateData = () => {
           value={sclass}
           onChange={(e) => setSclass(e.target.value)}
         />
-        <label>Template:</label>
-        <select
-          value={template}
-          onChange={(e) => {
-            setTemplate(e.target.value);
-            console.log(e.target.value);
-          }}
-        >
-          <option value="0">---choose---</option>
-          <option value="1">Montessori</option>
-          <option value="2">Grade</option>
-        </select>
+        <div className={`${!chooseTemplate&&"hidden"}`}>
+          <label>Template:</label>
+          <select
+            value={template}
+            onChange={(e) => {
+              setTemplate(e.target.value);
+              console.log(e.target.value);
+            }}
+          >
+            <option value="0">---choose---</option>
+            <option value="1">Montessori</option>
+            <option value="2">Grade</option>
+          </select>
+        </div>
         <button
           onClick={searchData}
           className="ml-2 text-white bg-red-500 shadow-xl rounded-md p-1 shadow-gray hover:bg-red-300"
@@ -216,7 +242,11 @@ const TemplateData = () => {
           Search Data
         </button>
       </section>
-      <section className={template === "1" ? "bg-slate-100 m-4 p-2" : "hidden"}>
+      <section
+        className={
+          template === "1" ? "bg-slate-100 m-4 p-2 flex flex-col" : "hidden"
+        }
+      >
         <div className="flex flex-col">
           <label>
             Topic
@@ -290,7 +320,7 @@ const TemplateData = () => {
         </div>
         <button
           onClick={() => {
-            saveToApi(topics);
+            saveToApi('1');
             console.log(topics);
           }}
           className="text-white bg-green-800 shadow-md rounded-md p-1 shadow-gray hover:bg-green-300 mt-8"
@@ -299,9 +329,7 @@ const TemplateData = () => {
         </button>
         {isLoading && <h1>Saving......</h1>}
       </section>
-      <section
-        className={!template === "1" ? "bg-slate-100 m-4 p-2" : "hidden"}
-      >
+      <section className={template === "2" ? "bg-slate-100 m-4 p-2" : "hidden"}>
         <label>Subject:</label>
         <input
           value={subject}
@@ -318,6 +346,17 @@ const TemplateData = () => {
         >
           Save
         </button>
+        <button
+          onClick={() => {
+            console.log(subjects,1234567)
+            saveToApi('2');
+            console.log(subjects);
+          }}
+          className="text-white bg-green-800 shadow-md ml-4 rounded-md p-1 shadow-gray hover:bg-green-300 mt-8"
+        >
+          Save Class Data
+        </button>
+        {isLoading && <h1>Saving......</h1>}
       </section>
       <section className="bg-slate-100 mt-8 p-3 flex">
         <label>
