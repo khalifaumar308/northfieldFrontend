@@ -5,7 +5,7 @@ import {
   Navigate,
   BrowserRouter
 } from "react-router-dom";
-import { Template1Form, Template2Form } from "./forms";
+import { Template1Form, Template2Form, TemplateData } from "./forms";
 import { Template1, Template2 } from "./formTemplates";
 import LandingPage from "./LandingPage";
 import Login from "./Login";
@@ -37,6 +37,7 @@ function App() {
           </PDFViewer>
         }
       /> */}
+        <Route path='/data' element={<TemplateData />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" index element={<Register />} />
         <Route element={<Authenticate/>}>
