@@ -33,17 +33,17 @@ function App() {
         path="/view"
         element={
           <PDFViewer>
-            <Template1 />
+            <Template2 />
           </PDFViewer>
-        }
-      /> */}
-        <Route path='/data' element={<TemplateData />} />
+        } */}
+      {/* /> */}
+        {/* <Route path='/data' element={<TemplateData />} /> */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" index element={<Register />} />
         <Route element={<Authenticate/>}>
-          <Route path="/" index element={<LandingPage />} />
-          <Route path="/template1" index element={<Template1Form />} />
-          <Route path="/template2" element={<Template2Form />} />
+          <Route path="/" index element={<TemplateData />} />
+          {/* <Route path="/template1" index element={<Template1Form />} />
+          <Route path="/template2" element={<Template2Form />} /> */}
         </Route>
         {/* <Route
         path="/t2"

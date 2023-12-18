@@ -37,7 +37,6 @@ const Template1 = () => {
     section: { textAlign: "center", margin: 30 },
   });
   const date = new Date()
-  console.log(date.getFullYear())
   const today = `${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()}`
   const tData = JSON.parse(sessionStorage.getItem('data'))
   const data = tData.topics//morfData(tData.topics);
@@ -316,12 +315,7 @@ const Template1 = () => {
               position: "relative",
             }}
           >
-            {/* <Image
-              style={{ width: "100px" }}
-              src={
-                JSON.parse(sessionStorage.getItem("teacherDetails")).signature
-              }
-            /> */}
+            <Image style={{ width: "100px" }} src={details.signature} />
             <Text
               style={{
                 position: "absolute",
@@ -332,7 +326,6 @@ const Template1 = () => {
               Teacher&apos;s Signature
             </Text>
           </View>
-          
         </View>
       </Page>
     </Document>

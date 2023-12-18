@@ -33,7 +33,8 @@ const Login = () => {
     try {
       const userData = await login({ email, pwd }).unwrap();
       dispatch(setCredentials({ ...userData, email }));
-      console.log(userData);
+      localStorage.setItem('userData',JSON.stringify({ ...userData, email }));
+      // console.log(userData);
       setEmail("");
       setPwd("");
       navigate("/");

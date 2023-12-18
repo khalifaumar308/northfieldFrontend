@@ -37,6 +37,7 @@ const TemplateData = () => {
   const [viewButtons, setViewButtons] = useState(false)
   const [saveStudentMutation, saveData] = useSaveStudentMutation();
   
+  const userData = JSON.parse(localStorage.getItem('userData'))
 
   const areas = [
     "LIBRARY",
@@ -129,9 +130,11 @@ const TemplateData = () => {
       name,
       email,
       absent,
-      // teacher: user.name,
-      // signature: user.signature,
+      teacher: userData.name,
+      signature: userData.signature,
+      class: sclass
     };
+    console.log(details)
     const data = { details, topics, assesment:assesments };
     sessionStorage.setItem('data', JSON.stringify(data))
     document.getElementById('template1form').reset()
@@ -224,8 +227,9 @@ const TemplateData = () => {
       name,
       email,
       absent,
-      // teacher: user.name,
-      // signature: user.signature,
+      teacher: userData.name,
+      signature: userData.signature,
+      class: sclass,
     };
     const data = {
       details,
@@ -334,7 +338,7 @@ const TemplateData = () => {
 
   const sendresult =async () => {
     const data = JSON.parse(sessionStorage.getItem('data'))
-    await saveStudentMutation(data)
+    await saveStudentMutation({...data, template:Number(template)})
   } 
 
   const content = saveData.isLoading?<h1>Sending Result</h1>:(

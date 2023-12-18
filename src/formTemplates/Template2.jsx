@@ -1,5 +1,5 @@
 import { PDFViewer, renderToFile } from "@react-pdf/renderer";
-import { logo1 } from "../assets";
+import { logo } from "../assets";
 import {
   Page,
   Text,
@@ -173,7 +173,7 @@ const Template2 = () => {
             verticalAlign: "middle",
           }}
         >
-          <Image style={{ width: "90px" }} src={logo1}></Image>
+          <Image style={{ width: "90px" }} src={logo}></Image>
           <View
             style={{
               position: "relative",
@@ -561,7 +561,7 @@ const Template2 = () => {
           <Text style={{ marginRight: "20px" }}>S - Stisfactory</Text>
           <Text>N - Needs Improvement</Text>
         </View>
-        {/* <View style={{ marginTop: "50px" }}>
+        <View style={{ marginTop: "50px" }}>
           <View
             style={{
               padding: "4px",
@@ -573,7 +573,7 @@ const Template2 = () => {
             <Image
               style={{ width: "100px" }}
               src={
-                JSON.parse(sessionStorage.getItem("teacherDetails")).signature
+                details.signature
               }
             />
             <Text style={{
@@ -582,8 +582,7 @@ const Template2 = () => {
               bottom:'-15px'
             }}>Teacher`&apos;`s Signature</Text>
           </View>
-        </View> */}
-        <Image style={{ position: "absolute" }} src={logo1}></Image>
+        </View>
       </Page>
     </Document>
   );
