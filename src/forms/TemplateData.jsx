@@ -323,15 +323,21 @@ const TemplateData = () => {
 
   const buttons = () => (
     <div className="flex mt-8 m-4 align-middle items-center">
-      <button onClick={sendresult} className="text-white shadow-md p-2 rounded-md shadow-black bg-red-950 ml-4">
+      <button
+        onClick={sendresult}
+        className="hover:bg-red-400 text-white shadow-md p-2 rounded-md shadow-black bg-red-950 ml-4"
+      >
         Send Result
       </button>
-      <button onClick={()=>setPreview(true)} className="text-white shadow-md p-2 rounded-md shadow-black bg-red-950 ml-4">
+      <button
+        onClick={() => setPreview(true)}
+        className="hover:bg-red-400 text-white shadow-md p-2 rounded-md shadow-black bg-red-950 ml-4"
+      >
         Preview
       </button>
       <button
         onClick={() => setPreview(false)}
-        className="p-2 text-white shadow-md rounded-md shadow-black bg-red-950 ml-4"
+        className="p-2 hover:bg-red-400 text-white shadow-md rounded-md shadow-black bg-red-950 ml-4"
       >
         Return TO Form
       </button>
@@ -343,7 +349,7 @@ const TemplateData = () => {
     await saveStudentMutation({...data, template:Number(template)})
   } 
 
-  const content = saveData.isLoading?<h1>Sending Result</h1>:(
+  const content = saveData.isLoading?<h1>Sending Result....</h1>:(
     <main>
       <section className="m-3 mb-6 bg-slate-100 p-2 flex align-middle items-center">
         <label>Class:</label>
@@ -603,11 +609,14 @@ const TemplateData = () => {
 
   return preview ? (
     <div>
-      <PDFViewer>
-      {template === '1'?<Template1 /> : <Template2 />}
+      <PDFViewer showToolbar >
+        {template === "1" ? <Template1 /> : <Template2 />}
       </PDFViewer>
       {buttons()}
-    </div>): content
+    </div>
+  ) : (
+    content
+  );
 }
 
 export default TemplateData
