@@ -37,7 +37,7 @@ const TemplateData = () => {
   const [viewButtons, setViewButtons] = useState(false)
   const [saveStudentMutation, saveData] = useSaveStudentMutation();
   
-  const userData = JSON.parse(localStorage.getItem('userData'))
+  const userData = JSON.parse(localStorage.getItem('userData')).user
 
   const areas = [
     "LIBRARY",
