@@ -195,7 +195,7 @@ const Template1 = () => {
           <View
             style={{
               width: "100%",
-              borderBottom: "1px solid black",
+              borderBottom: "2px solid red",
               marginTop: "4px",
               flexDirection: "row",
               fontSize: "10px",

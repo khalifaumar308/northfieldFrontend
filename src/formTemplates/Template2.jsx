@@ -240,7 +240,7 @@ const Template2 = () => {
         </View>
         <View
           style={{
-            borderBottom: "2px solid black",
+            borderBottom: "2px solid red",
             display: "flex",
             flexDirection: "row",
             alignContent: "space-between",
