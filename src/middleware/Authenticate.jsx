@@ -6,7 +6,7 @@ const Authenticate = () => {
   const token = useSelector(selectCurrentToken);
   const user = useSelector(selectCurrentUser);
   const location = useLocation();
-  const userData = localStorage.get("userData");
+  const userData = localStorage.getItem("userData");
   
   return (token && user) || (userData) ? (
     <Outlet />
