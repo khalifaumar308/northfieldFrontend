@@ -134,8 +134,8 @@ const TemplateData = () => {
       signature: userData.signature,
       class: sclass
     };
-    console.log(details)
-    const data = { details, topics, assesment:assesments };
+    // console.log(details)
+    const data = { details, topics, assesment:assesments, template:"1" };
     sessionStorage.setItem('data', JSON.stringify(data))
     document.getElementById('template1form').reset()
     setName('')
@@ -236,6 +236,7 @@ const TemplateData = () => {
       subjects: t2subjects,
       specailAreas,
       affectiveAssesment: assesments,
+      template: "2"
     };
     sessionStorage.setItem('data', JSON.stringify(data))
     document.getElementById('template2form').reset()
@@ -346,8 +347,8 @@ const TemplateData = () => {
 
   const sendresult =async () => {
     const data = JSON.parse(sessionStorage.getItem('data'))
-    console.log(template, 'sending mail')
-    await saveStudentMutation({...data, template:template})
+    console.log(data.template, 'sending mail')
+    await saveStudentMutation({...data})
   } 
 
   const content = saveData.isLoading?<h1>Sending Result....</h1>:(
