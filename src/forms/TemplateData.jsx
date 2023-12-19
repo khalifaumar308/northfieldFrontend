@@ -37,6 +37,8 @@ const TemplateData = () => {
   const [viewButtons, setViewButtons] = useState(false)
   const [saveStudentMutation, saveData] = useSaveStudentMutation();
   
+  const [tcomment, setTcomment] = useState('')
+
   const userData = JSON.parse(localStorage.getItem('userData')).user
 
   const areas = [
@@ -145,7 +147,7 @@ const TemplateData = () => {
     // console.log(topics)
   }
 
-  const subjectDivs = subjects.map((sbj, id) => {
+  const subjectDivs = subjects.map(([sbj, comment], id) => {
     return (
       <div key={id} className="flex w-full">
         <div className="w-[20.2%] border-y border-black border-r p-1 border-l">{sbj}</div>
@@ -189,11 +191,9 @@ const TemplateData = () => {
           type="text"
           className="border-black border-r w-[12%] p-1 border-b"
         />
-        <input
-          name={`${sbj};comment`}
-          type="text"
-          className="border-black border-r border-b w-[30%]"
-        />
+        <div className="border-black border-r border-b w-[30%]">
+          {comment}
+        </div>
       </div>
     );
   })
@@ -474,12 +474,14 @@ const TemplateData = () => {
         <input
           value={subject}
           onChange={(e) => setSubject(e.target.value)}
-          className="p-1 ml-2"
+          className="p-1 ml-2 mr-3"
           placeholder="Subject"
         />
+        <label>Target Comment:</label>
+        <input value={tcomment} onChange={(e)=>setTcomment(e.target.value)} className="ml-2 p-2 w-20 mr-3" />
         <button
           onClick={() => {
-            setSubjects([...subjects, subject]);
+            setSubjects([...subjects, [subject, tcomment]]);
             setSubject("");
           }}
           className="ml-2 text-white bg-red-400 shadow-md rounded-md p-1 shadow-gray hover:bg-red-300"
