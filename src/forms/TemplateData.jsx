@@ -271,7 +271,7 @@ const TemplateData = () => {
         return []
       }
       const data = await res.json()
-      console.log(data)
+      // console.log(data)
       if (data.template == '1') {
         setTopics(data.data)
         setTemplate('1')
@@ -346,7 +346,8 @@ const TemplateData = () => {
 
   const sendresult =async () => {
     const data = JSON.parse(sessionStorage.getItem('data'))
-    await saveStudentMutation({...data, template:Number(template)})
+    console.log(template, 'sending mail')
+    await saveStudentMutation({...data, template:template})
   } 
 
   const content = saveData.isLoading?<h1>Sending Result....</h1>:(
