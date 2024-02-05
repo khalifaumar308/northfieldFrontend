@@ -264,7 +264,7 @@ const TemplateData = () => {
   const searchData = async () => {
     try {
       const res = await fetch(
-        `https://ntmbackend.onrender.com/user/data?class=${sclass}`
+        `https://northfield-montessori.onrender.com/user/data?class=${sclass}`
       );
       if (res.status != 200) {
         alert("Class Data is not saved, proceed to choose template")
