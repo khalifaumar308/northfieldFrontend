@@ -16,7 +16,7 @@ import { setCredentials, logOut } from "../middleware/auth/authSlice";
 
 // export const { useSaveStudentMutation } = appApi;
 const baseQuery = fetchBaseQuery({
-  baseUrl: "https://ntmbackend.onrender.com",
+  baseUrl: "https://northfield-montessori.onrender.com",
   // baseUrl: "http://localhost:3000",
   credentials: "same-origin",
   // mode: "no-cors",
