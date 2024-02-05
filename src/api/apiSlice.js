@@ -14,7 +14,6 @@ import { setCredentials, logOut } from "../middleware/auth/authSlice";
 //   }),
 // });
 
-// export const { useSaveStudentMutation } = appApi;
 const baseQuery = fetchBaseQuery({
   baseUrl: "https://northfield-montessori.onrender.com",
   // baseUrl: "http://localhost:3000",
@@ -46,7 +45,6 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
       api.dispatch(logOut());
     }
   }
-
   return result;
 };
 
